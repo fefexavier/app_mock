@@ -1,0 +1,66 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
+
+AppColor lightColor = AppColor(
+  brandPrimary:  Color.fromRGBO(0, 109, 119, 1),
+  brandSecondary: Color.fromRGBO(66, 153, 155, 1),
+  brandTertiary: Color.fromRGBO(131, 197, 190, 1),
+  background: const Color(0xFFffffff),
+  grayBackground: const Color(0xFFEEEEEE),
+);
+
+AppColor darkColor = AppColor(
+  brandPrimary:  Color.fromRGBO(0, 109, 119, 1),
+  brandSecondary: Color.fromRGBO(66, 153, 155, 1),
+  brandTertiary: Color.fromRGBO(131, 197, 190, 1),
+  background: const Color(0xFFffffff),
+  grayBackground: const Color(0xFFEEEEEE),
+);
+
+class AppColor {
+  AppColor({
+    required this.brandPrimary,
+    required this.brandSecondary,
+    required this.brandTertiary,
+    required this.background,
+    required this.grayBackground,
+  });
+
+  /// novas cores
+  final Color brandPrimary;
+  final Color brandSecondary;
+  final Color brandTertiary;
+  final Color background;
+  final Color grayBackground;
+
+  static AppColor getColor() {
+    // Retorna o tema correto baseado no tema atual
+    return CustomTheme.currentTheme == ThemeMode.dark ? darkColor : lightColor;
+  }
+
+  static Color getThemeColor(Color darkColor, Color lightColor) {
+    return CustomTheme.currentTheme == ThemeMode.dark ? darkColor : lightColor;
+  }
+}
+
+CustomTheme currentTheme = CustomTheme();
+
+class CustomTheme {
+  static final brightness = SchedulerBinding.instance.window.platformBrightness;
+  static bool _isDarkTheme = brightness == Brightness.dark;
+
+  static ThemeMode get currentTheme =>
+      _isDarkTheme ? ThemeMode.dark : ThemeMode.light;
+
+  void toggleTheme() {
+    _isDarkTheme = !_isDarkTheme;
+  }
+
+  bool getIsDarkTheme() {
+    return _isDarkTheme;
+  }
+
+  void setTheme(bool darkTheme) {
+    _isDarkTheme = darkTheme;
+  }
+}
