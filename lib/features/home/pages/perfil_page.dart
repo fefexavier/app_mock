@@ -66,33 +66,21 @@ class _PerfilPageState extends State<PerfilPage> {
  _buildListItem(
             icon: Icons.person,
             text: "Alterar senha",
-            onTap: () => Modular.to.pushNamed('/editar-perfil'),
+            onTap: () => Modular.to.pushNamed('alterar-senha'),
           ),
-          _buildListItem(
-            icon: Icons.notifications,
-            text: "Fale conosco",
-            onTap: () => Modular.to.pushNamed('/configuracoes-notificacao'),
-          ),
+      
           _buildListItem(
             icon: Icons.lock,
             text: "Perguntas frequentes",
-            onTap: () => Modular.to.pushNamed('/alterar-senha'),
+            onTap: () => Modular.to.pushNamed('perguntas'),
           ),
           _buildListItem(
             icon: Icons.payment,
             text: "Sobre",
-            onTap: () => Modular.to.pushNamed('/metodos-pagamento'),
+            onTap: () => Modular.to.pushNamed('sobre'),
           ),
-          _buildListItem(
-            icon: Icons.history,
-            text: "Gerenciar conta",
-            onTap: () => Modular.to.pushNamed('/historico-compras'),
-          ),
-          _buildListItem(
-            icon: Icons.help,
-            text: "Ver Gui de autorização disponível",
-            onTap: () => Modular.to.pushNamed('/ajuda-suporte'),
-          ),
+      
+        
           _buildListItem(
             icon: Icons.logout,
             text: "Sair",

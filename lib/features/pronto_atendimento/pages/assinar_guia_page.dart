@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:ui' as ui;
 import 'package:app_mock/core/colors';
+import 'package:app_mock/core/services/app_enums.dart';
 import 'package:app_mock/core/widgets/outline_buttom.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -132,6 +133,44 @@ class _AssinarGuiaPageState extends State<AssinarGuiaPage> with AutomaticKeepAli
           key: _formKeyacesso,
           child: Column(
             children: [
+
+  // ValueListenableBuilder<PaginateState>(
+  //                   valueListenable: controller.viewStateVideoHome,
+  //                   builder: (context, state, child) {
+  //                     if (state == PaginateState.loading) {
+  //                       return const ChannelVideoLoading();
+  //                     } else if (state == PaginateState.error) {
+  //                       return const Text('Erro ao carregar vídeos');
+  //                     } else if (state == PaginateState.infinityLoading) {
+  //                       return const ChannelVideoLoading();
+  //                     } else if (state == PaginateState.sucess) {
+  //                       return Column(
+  //                         children: [
+  //                           Container(
+  //                             height: 15,
+  //                           ),
+  //                           VideoCardHome(
+  //                             listaHorizontal:
+  //                                 controller.listCardVideoPrincipal,
+  //                             showTabModel: controller.atuaTab,
+  //                           ),
+  //                         ],
+  //                       );
+  //                     } else {
+  //                       return const SizedBox.shrink();
+  //                     }
+  //                   },
+  //                 ),
+
+
+
+
+
+
+
+
+
+
               // Campo de download do PDF
               Container(
                 padding: const EdgeInsets.all(16.0),
