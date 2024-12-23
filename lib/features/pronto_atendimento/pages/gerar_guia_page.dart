@@ -15,6 +15,8 @@ class GerarGuiaPage extends StatefulWidget {
 class _GerarGuiaPageState extends State<GerarGuiaPage> {
   String? selectedHospital;
   String? selectedSpecialty;
+    int? selectedHospitalId;
+  int? selectedSpecialtyId;
   String searchQuery = '';
 
   final controller = Modular.get<AtendimentoController>();
@@ -42,6 +44,12 @@ class _GerarGuiaPageState extends State<GerarGuiaPage> {
                     onSelected: (hospital) {
                       setState(() {
                         selectedHospital = hospital;
+
+                         var hospselect = controller.hospitais.firstWhere(
+  (hosp) => hosp.nome == selectedHospital,
+  orElse: () => controller.hospitais.first, // Se não encontrar, retorna null
+);
+                        selectedHospitalId =  int.parse( hospselect.id);
                       });
                       Navigator.of(context).pop(); // Fecha o diálogo
                     },
@@ -76,6 +84,11 @@ class _GerarGuiaPageState extends State<GerarGuiaPage> {
                     onSelected: (specialty) {
                       setState(() {
                         selectedSpecialty = specialty;
+                        var especialidadeSelecionada = controller.especialidades.firstWhere(
+  (especialidade) => especialidade.descricao == selectedSpecialty,
+  orElse: () => controller.especialidades.first, // Se não encontrar, retorna null
+);
+                        selectedSpecialtyId =  int.parse( especialidadeSelecionada.id);
                       });
                       Navigator.of(context).pop(); // Fecha o diálogo
                     },
@@ -118,7 +131,10 @@ class _GerarGuiaPageState extends State<GerarGuiaPage> {
                         content: Text(
                             'Você selecionou: $selectedHospital e $selectedSpecialty'),
                       ),
+
+                   
                     );
+                  controller.solicitarGuiaAtendimento( selectedHospitalId!, selectedSpecialtyId!);
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(

@@ -1,9 +1,11 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'dart:async';
+import 'dart:developer';
 
-
+import 'package:app_mock/core/services/app_enums.dart';
 import 'package:app_mock/core/services/authentication.dart';
+import 'package:app_mock/features/login/login_service/login_service.dart';
 import 'package:app_mock/features/login/model/user_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -12,15 +14,19 @@ import 'package:hive/hive.dart';
 import '../../../core/repositories/local_storage.dart';
 
 class LoginController {
-
-
+  final repository = Modular.get<LoginService>();
 
   ValueNotifier<bool> checkBiometria = ValueNotifier(false);
   ValueNotifier<bool> isLoading = ValueNotifier(false);
-    final ILocalStorage storage = Modular.get();
+  final ILocalStorage storage = Modular.get();
+  List<OperadoraPlanoSaude> operadoras = [];
+  ValueNotifier<PaginateState> stateOperadoras =
+      ValueNotifier(PaginateState.start);
+  // AutenticacaoServico _autenticacaoServico = AutenticacaoServico();
 
-
-   // AutenticacaoServico _autenticacaoServico = AutenticacaoServico();
+  Future<void> saveUser() async {
+    await repository.cadastrarUsuario();
+  }
 
   Future<void> getLoginWithBio(BuildContext context) async {
     final box = await Hive.openBox('loginbox');
@@ -38,9 +44,23 @@ class LoginController {
     await box.close();
   }
 
-setUser(Usuario user){
-  storage.setUser(user);
-}
+  Future<List<OperadoraPlanoSaude>> getOperadoras() async {
+    stateOperadoras.value = PaginateState.loading;
+
+    try {
+      operadoras = await repository.getPlanos();
+      stateOperadoras.value = PaginateState.sucess;
+    } catch (e) {
+      stateOperadoras.value = PaginateState.error;
+      log('Erro ao buscar operadoras: $e');
+    }
+
+    return operadoras;
+  }
+
+  setUser(Usuario user) {
+    storage.setUser(user);
+  }
   // Future<bool> _localAuth() async {
   //   try {
   //     bool authenticated = await auth.authenticate(
@@ -161,10 +181,5 @@ setUser(Usuario user){
   //   await box.close();
   // }
 
-registro()async{
-     Usuario?  usuario =  await storage.getUser();
- // _autenticacaoServico.cadastrarUsuario(nome: usuario!.nome!, senha: usuario.senha!, email: usuario.email!);
-}
-
-
+ 
 }

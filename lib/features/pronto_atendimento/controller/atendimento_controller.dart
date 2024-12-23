@@ -41,6 +41,9 @@ class AtendimentoController {
   
   }
 
+
+  
+
   // Obter Operadoras
   Future<List<Map<String, dynamic>>> getOperadoras() async {
     stateOperadoras.value = PaginateState.loading;
@@ -120,6 +123,26 @@ class AtendimentoController {
       stateAutorizacao.value = PaginateState.error;
       log('Erro ao realizar autorização: $e');
       return false;
+    }
+  }
+
+    Future<void> solicitarGuiaAtendimento(int hospital, int especialidade) async {
+    stateAutorizacao.value = PaginateState.loading;
+
+    try {
+      final sucesso = await repository.solicitarGuiaAtendimento(hospitalId: hospital, especialidadeId: especialidade);
+      if (sucesso) {
+        stateAutorizacao.value = PaginateState.sucess;
+        log('Autorização realizada com sucesso');
+      } else {
+        stateAutorizacao.value = PaginateState.error;
+        log('Falha ao realizar autorização');
+      }
+   
+    } catch (e) {
+      stateAutorizacao.value = PaginateState.error;
+      log('Erro ao realizar autorização: $e');
+  
     }
   }
 }

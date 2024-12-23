@@ -1,5 +1,7 @@
+import 'package:app_mock/core/services/http.dart';
 import 'package:app_mock/features/home/home_module.dart';
 import 'package:app_mock/features/login/controller/login_controller.dart';
+import 'package:app_mock/features/login/login_service/login_service.dart';
 import 'package:app_mock/features/login/pages/login_page.dart';
 import 'package:app_mock/features/login/pages/primeiro_acesso_arquivo.dart';
 import 'package:app_mock/features/login/pages/primeiro_acesso_page.dart';
@@ -13,6 +15,8 @@ class LoginModule extends Module {
   void binds(Injector i) {
     i
     ..addSingleton<ILocalStorage>(LocalStorage.new)
+    ..add(LoginService.new)
+    ..add(HttpClient.new)
     ..add(LoginController.new);
 
    

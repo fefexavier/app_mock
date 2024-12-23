@@ -1,14 +1,17 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:app_mock/core/repositories/local_storage.dart';
 import 'package:app_mock/core/services/http.dart';
+import 'package:app_mock/features/login/model/user_model.dart';
 import 'package:app_mock/features/pronto_atendimento/model/especialidade_model.dart';
 import 'package:app_mock/features/pronto_atendimento/model/hospital_model.dart';
-
+import 'package:flutter_modular/flutter_modular.dart';
 
 class AtendimentoRepository {
   AtendimentoRepository(this.client);
   final HttpClient client;
+    final ILocalStorage storage = Modular.get();
 
   // Obter Hospitais
   Future<List<Hospital>> getHospitais() async {
@@ -23,7 +26,8 @@ class AtendimentoRepository {
       final body = utf8.decode(res.bodyBytes);
       final Map<String, dynamic> decodedBody = json.decode(body);
 
-      if (!decodedBody.containsKey('hospitais') || decodedBody['hospitais'] is! List) {
+      if (!decodedBody.containsKey('hospitais') ||
+          decodedBody['hospitais'] is! List) {
         throw Exception('Estrutura da resposta inválida');
       }
 
@@ -36,6 +40,50 @@ class AtendimentoRepository {
       throw Exception('Erro ao buscar hospitais');
     }
   }
+
+
+
+Future<bool> solicitarGuiaAtendimento({
+  required int especialidadeId,
+  required int hospitalId,
+}) async {
+  try {
+    // Obtendo o usuário do armazenamento
+    Usuario? usuario = await storage.getUser();
+    
+    // Verificando se o usuário foi encontrado
+    if (usuario == null) {
+      throw Exception('Usuário não encontrado');
+    }
+
+    final url = Uri.https('fila.wiremockapi.cloud', '/autorizacao');
+    
+    // Enviando a requisição POST
+    final res = await client.post(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode({
+        'idUsuario': usuario.cpf,
+        'especialidadeId': especialidadeId,
+        'hospitalId': hospitalId,
+      }),
+    );
+
+    // Verificando o status da resposta
+    if (res.statusCode != 200) {
+      throw Exception('Erro na requisição: ${res.body}');
+    }
+
+    return true;
+  } catch (e, stacktrace) {
+    // Exibindo erro no console
+    print('Error: $e\nstack: $stacktrace');
+    return false;
+  }
+}
+
 
   // Obter Operadoras
   Future<List<Map<String, dynamic>>> getOperadoras() async {
@@ -50,7 +98,8 @@ class AtendimentoRepository {
       final body = utf8.decode(res.bodyBytes);
       final Map<String, dynamic> decodedBody = json.decode(body);
 
-      if (!decodedBody.containsKey('operadoras') || decodedBody['operadoras'] is! List) {
+      if (!decodedBody.containsKey('operadoras') ||
+          decodedBody['operadoras'] is! List) {
         throw Exception('Estrutura da resposta inválida');
       }
 
@@ -62,7 +111,6 @@ class AtendimentoRepository {
     }
   }
 
-  // Obter Especialidades
 Future<List<Especialidade>> getEspecialidades() async {
   try {
     final url = Uri.https('fila.wiremockapi.cloud', '/especialidades');
@@ -75,13 +123,15 @@ Future<List<Especialidade>> getEspecialidades() async {
     final body = utf8.decode(res.bodyBytes);
     final Map<String, dynamic> decodedBody = json.decode(body);
 
-    if (!decodedBody.containsKey('especialidadesProntoAtendimento') ||
-        decodedBody['especialidadesProntoAtendimento'] is! List) {
+    // Verificar se a chave 'especialidades' está presente e é uma lista
+    if (!decodedBody.containsKey('especialidades') ||
+        decodedBody['especialidades'] is! List) {
       throw Exception('Estrutura da resposta inválida');
     }
 
+    // Mapeia a lista de especialidades para uma lista de objetos Especialidade
     final List<Especialidade> especialidades =
-        (decodedBody['especialidadesProntoAtendimento'] as List)
+        (decodedBody['especialidades'] as List)
             .map((e) => Especialidade.fromJson(e as Map<String, dynamic>))
             .toList();
 
@@ -125,7 +175,8 @@ Future<List<Especialidade>> getEspecialidades() async {
       final url = Uri.https('fila.wiremockapi.cloud', '/usuario');
       final res = await client.post(url, body: jsonEncode(usuarioData));
 
-      if (res.statusCode != 201) { // Assumindo 201 como código de sucesso para criação
+      if (res.statusCode != 201) {
+        // Assumindo 201 como código de sucesso para criação
         throw Exception('Erro ao cadastrar usuário: ${res.statusCode}');
       }
 

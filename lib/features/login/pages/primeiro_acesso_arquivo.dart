@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:app_mock/core/colors';
 import 'package:app_mock/core/widgets/outline_buttom.dart';
 import 'package:app_mock/core/widgets/text.dart';
+import 'package:app_mock/features/login/controller/login_controller.dart';
 import 'package:app_mock/features/login/model/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -26,7 +27,7 @@ class _PrimeiroAcessoArquivoPageState extends State<PrimeiroAcessoArquivoPage>
   final _formKeyacesso = GlobalKey<FormState>();
 
      final ILocalStorage storage = Modular.get();
-
+  final LoginController controller = Modular.get();
   @override
   void initState() {
     super.initState();
@@ -62,7 +63,9 @@ void salvarUsuarioComImagens(Usuario usuarioAtual) {
     documentoAssinado: documentoAssinadoBase64,
     comprovanteResidencia: comprovanteResidenciaBase64,
   );
+  
 
+   controller.setUser(usuarioAtualizado);
   // Exemplo: Enviar o usuário atualizado para o controller ou backend
   print(usuarioAtualizado.toJson());
 }

@@ -1,7 +1,10 @@
 import 'package:app_mock/core/colors';
+import 'package:app_mock/core/repositories/local_storage.dart';
 import 'package:app_mock/core/widgets/custom_text_field.dart';
 import 'package:app_mock/core/widgets/outline_buttom.dart';
 import 'package:app_mock/core/widgets/text.dart';
+import 'package:app_mock/features/login/controller/login_controller.dart';
+import 'package:app_mock/features/login/model/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -22,10 +25,12 @@ class _PrimeiroAcessoSenhaPageState extends State<PrimeiroAcessoSenhaPage>
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController repeatPasswordController =
       TextEditingController();
+        final controller = Modular.get<LoginController>();
 
   // FocusNodes para navegação entre os campos
   final FocusNode passwordNode = FocusNode();
   final FocusNode repeatPasswordNode = FocusNode();
+       final ILocalStorage storage = Modular.get();
 
   @override
   void dispose() {
@@ -47,7 +52,8 @@ class _PrimeiroAcessoSenhaPageState extends State<PrimeiroAcessoSenhaPage>
     }
 
     // Verifica se a senha tem pelo menos uma letra maiúscula, uma letra minúscula e um número
-    if (!RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$').hasMatch(value)) {
+    if (!RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$')
+        .hasMatch(value)) {
       return 'A senha deve conter uma letra maiúscula, uma minúscula e um número';
     }
     return null;
@@ -63,6 +69,18 @@ class _PrimeiroAcessoSenhaPageState extends State<PrimeiroAcessoSenhaPage>
     }
     return null;
   }
+
+
+  void salvarUsuarioComImagens(Usuario usuarioAtual) {
+
+  final usuarioAtualizado = usuarioAtual.copyWith(
+    senha: passwordController.value.text,
+  
+  );
+  controller.setUser(usuarioAtualizado);
+  // Exemplo: Enviar o usuário atualizado para o controller ou backend
+  print(usuarioAtualizado.toJson());
+}
 
   @override
   Widget build(BuildContext context) {
@@ -169,20 +187,22 @@ class _PrimeiroAcessoSenhaPageState extends State<PrimeiroAcessoSenhaPage>
                   SizedBox(
                     width: double.maxFinite,
                     child: MyOutlinedButton(
-                   onPressed: () {
-  // Remove o foco dos campos ao clicar no botão
-  FocusManager.instance.primaryFocus?.unfocus();
+                      onPressed: () async{
+                        // Remove o foco dos campos ao clicar no botão
+                        FocusManager.instance.primaryFocus?.unfocus();
 
-  // Valida os campos do formulário
-  if (_formKeyacesso.currentState?.validate() ?? false) {
-    print("Formulário validado com sucesso!");
-    // Lógica de navegação
-    Modular.to.pushNamed('base');
-  } else {
-    print("Erro na validação do formulário");
-  }
-},
+                        // Valida os campos do formulário
+                        if (_formKeyacesso.currentState?.validate() ?? false) {
+                          print("Formulário validado com sucesso!");
 
+                       Usuario?  usuario =  await storage.getUser();
+            salvarUsuarioComImagens(usuario!);
+                          controller.saveUser();
+                         // Modular.to.pushNamed('base');
+                        } else {
+                          print("Erro na validação do formulário");
+                        }
+                      },
                       gradient: const LinearGradient(colors: [
                         Color.fromRGBO(0, 109, 119, 1),
                         Color.fromRGBO(131, 197, 190, 1),

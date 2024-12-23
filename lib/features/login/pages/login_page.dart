@@ -64,7 +64,7 @@ void dispose() {
                 children: [
                   const SizedBox(height: 130),
                   Image.asset(
-                    'assets/logo.png',
+                    'assets/logo2.png',
                     height: 200,
                   ),
 

@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'package:app_mock/core/colors';
+import 'package:app_mock/core/services/app_enums.dart';
 import 'package:app_mock/core/widgets/custom_text_field.dart';
+import 'package:app_mock/core/widgets/loading_screen.dart';
 import 'package:app_mock/core/widgets/outline_buttom.dart';
 import 'package:app_mock/core/widgets/text.dart';
 import 'package:app_mock/features/login/controller/login_controller.dart';
@@ -62,6 +64,7 @@ class _PrimeiroAcessoPageState extends State<PrimeiroAcessoPage>
   @override
   void initState() {
     super.initState();
+    controller.getOperadoras();
     cep.addListener(_onCepChanged);
   }
 
@@ -207,8 +210,23 @@ class _PrimeiroAcessoPageState extends State<PrimeiroAcessoPage>
             padding: const EdgeInsets.all(16),
             child: Form(
               key: _formKeyacesso,
-              child: Column(
+              child:
+                ValueListenableBuilder<PaginateState>(
+                    valueListenable: controller.stateOperadoras,
+                    builder: (context, state, child) {
+                      if (state == PaginateState.loading) {
+                        return Center(child: const LoadingScreen());
+                      } else if (state == PaginateState.error) {
+                        return const Text('Erro ao carregar vídeos');
+                      } else if (state == PaginateState.infinityLoading) {
+                        return const LoadingScreen();
+                      } else if (state == PaginateState.sucess) {
+                        return  Column(
                 children: [
+
+
+
+
                   Padding(
                     padding:
                         const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
@@ -378,23 +396,40 @@ class _PrimeiroAcessoPageState extends State<PrimeiroAcessoPage>
                           e == null || e.isEmpty ? 'Campo obrigatório' : null,
                     ),
                   ),
-                  Padding(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-                    child: CustomTextField(
-                      labelText: 'Plano de Saúde',
-                      hintStyle: TextStyle(color: lightColor.brandPrimary),
-                      controller: plano,
-                      hintText: 'Plano de saúde',
-                      prefixIcon: Icon(
-                        Icons.health_and_safety,
-                        color: AppColor.getThemeColor(
-                            darkColor.brandPrimary, lightColor.brandPrimary),
-                      ),
-                      validator: (e) =>
-                          e == null || e.isEmpty ? 'Campo obrigatório' : null,
-                    ),
-                  ),
+         Padding(
+  padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+  child: Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Text('Plano de Saúde', style: TextStyle(fontSize: 16, color: lightColor.brandPrimary)),
+      DropdownButtonFormField<String>(
+        decoration: InputDecoration(
+          hintText: 'Selecione uma operadora',
+          prefixIcon: Icon(
+            Icons.health_and_safety,
+            color: AppColor.getThemeColor(darkColor.brandPrimary, lightColor.brandPrimary),
+          ),
+          contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+          border: OutlineInputBorder(),
+        ),
+        value: plano.text.isNotEmpty ? plano.text : null,
+        onChanged: (newValue) {
+          plano.text = newValue!;
+       
+        },
+        items: controller.operadoras.map((operadora) {
+          return DropdownMenuItem<String>(
+            value: operadora.nomeSocial,
+            child: Text(operadora.nomeSocial),
+          );
+        }).toList(),
+        validator: (e) => e == null || e.isEmpty ? 'Campo obrigatório' : null,
+      ),
+    ],
+  ),
+),
+
+
                   Padding(
                     padding:
                         const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
@@ -433,7 +468,19 @@ class _PrimeiroAcessoPageState extends State<PrimeiroAcessoPage>
                     ),
                   ),
                 ],
-              ),
+              );
+                      } else {
+                        return const SizedBox.shrink();
+                      }
+                    },
+                  ),
+              
+              
+              
+              
+              
+              
+              
             ),
           ),
         ),

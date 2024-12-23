@@ -96,6 +96,7 @@ class Usuario {
     String? imagemPerfil,
     String? documentoAssinado,
     String? comprovanteResidencia,
+        String? senha,
   }) {
     return Usuario(
       cpf: cpf ?? this.cpf,
@@ -112,6 +113,87 @@ class Usuario {
       imagemPerfil: imagemPerfil ?? this.imagemPerfil,
       documentoAssinado: documentoAssinado ?? this.documentoAssinado,
       comprovanteResidencia: comprovanteResidencia ?? this.comprovanteResidencia,
+        senha: senha ?? this.senha,
     );
+  }
+}
+
+
+class OperadoraPlanoSaude {
+  final String id;
+  final String nomeSocial;
+  final String cnpj;
+  final String registroANS;
+  final ParametrosAutorizacao parametrosAutorizacao;
+
+  OperadoraPlanoSaude({
+    required this.id,
+    required this.nomeSocial,
+    required this.cnpj,
+    required this.registroANS,
+    required this.parametrosAutorizacao,
+  });
+
+  factory OperadoraPlanoSaude.fromJson(Map<String, dynamic> json) {
+    return OperadoraPlanoSaude(
+      id: json['id'],
+      nomeSocial: json['nomeSocial'],
+      cnpj: json['cnpj'],
+      registroANS: json['registroANS'],
+      parametrosAutorizacao: ParametrosAutorizacao.fromJson(json['parametrosAutorizacao']),
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'nomeSocial': nomeSocial,
+      'cnpj': cnpj,
+      'registroANS': registroANS,
+      'parametrosAutorizacao': parametrosAutorizacao.toJson(),
+    };
+  }
+}
+
+class ParametrosAutorizacao {
+  final bool autorizacaoPreviaNecessaria;
+  final int limiteConsultasAnual;
+
+  ParametrosAutorizacao({
+    required this.autorizacaoPreviaNecessaria,
+    required this.limiteConsultasAnual,
+  });
+
+  factory ParametrosAutorizacao.fromJson(Map<String, dynamic> json) {
+    return ParametrosAutorizacao(
+      autorizacaoPreviaNecessaria: json['autorizacaoPreviaNecessaria'],
+      limiteConsultasAnual: json['limiteConsultasAnual'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'autorizacaoPreviaNecessaria': autorizacaoPreviaNecessaria,
+      'limiteConsultasAnual': limiteConsultasAnual,
+    };
+  }
+}
+
+class PlanoSaude {
+  final List<OperadoraPlanoSaude> operadorasPlanoSaude;
+
+  PlanoSaude({required this.operadorasPlanoSaude});
+
+  factory PlanoSaude.fromJson(Map<String, dynamic> json) {
+    var list = json['operadorasPlanoSaude'] as List;
+    List<OperadoraPlanoSaude> operadoras = list.map((i) => OperadoraPlanoSaude.fromJson(i)).toList();
+
+    return PlanoSaude(operadorasPlanoSaude: operadoras);
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'operadorasPlanoSaude': operadorasPlanoSaude.map((e) => e.toJson()).toList(),
+    };
   }
 }
