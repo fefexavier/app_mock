@@ -50,7 +50,7 @@ class LoginService {
     }
   }
 
-  Future<void> cadastrarUsuario() async {
+  Future<void> cadastrarUsuario(BuildContext context ) async {
     try {
       // Recupera o usuário
       final usuario = await storage.getUser();
@@ -88,16 +88,23 @@ class LoginService {
 
       // Verifica se ocorreu algum erro
       if (res.statusCode != 200) {
-        Asuka.showSnackBar(SnackBar(
-          content: Text('Erro ao cadastrar usuário, contate o plano de saúde'),
-          backgroundColor: Colors.red,
-        ));
+     ScaffoldMessenger.of(context).showSnackBar(
+              const   SnackBar(
+                  content: Text('Houve um erro ao cadastrar usuário, entre em contato com o Plano'),
+                  duration: Duration(seconds: 3), 
+               backgroundColor: Colors.red,
+                ),
+              );
         throw Exception('Erro ao cadastrar usuário: ${res.body}');
       }
 
-      Asuka.showSnackBar(SnackBar(
-          content: Text('Usuário cadastrado com sucesso!'),
-          backgroundColor: lightColor.brandPrimary));
+     ScaffoldMessenger.of(context).showSnackBar(
+                 SnackBar(
+                  content: Text('Usuário cadastrado com sucesso!'),
+               backgroundColor: lightColor.brandPrimary,
+                ),
+              );
+      Modular.to.pushNamed('base');
     } catch (e, stacktrace) {
       print('Error: $e\nStack: $stacktrace');
     }

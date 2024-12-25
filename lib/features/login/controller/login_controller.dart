@@ -24,8 +24,8 @@ class LoginController {
       ValueNotifier(PaginateState.start);
   // AutenticacaoServico _autenticacaoServico = AutenticacaoServico();
 
-  Future<void> saveUser() async {
-    await repository.cadastrarUsuario();
+  Future<void> saveUser(BuildContext context) async {
+    await repository.cadastrarUsuario(context);
   }
 
   Future<void> getLoginWithBio(BuildContext context) async {

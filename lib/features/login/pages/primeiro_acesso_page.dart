@@ -215,7 +215,13 @@ class _PrimeiroAcessoPageState extends State<PrimeiroAcessoPage>
                     valueListenable: controller.stateOperadoras,
                     builder: (context, state, child) {
                       if (state == PaginateState.loading) {
-                        return Center(child: const LoadingScreen());
+                        return Column(
+                          
+                          children: [
+                            SizedBox(height: MediaQuery.of(context).size.height *0.25,),
+                            Center(child: const LoadingScreen()),
+                          ],
+                        );
                       } else if (state == PaginateState.error) {
                         return const Text('Erro ao carregar vídeos');
                       } else if (state == PaginateState.infinityLoading) {

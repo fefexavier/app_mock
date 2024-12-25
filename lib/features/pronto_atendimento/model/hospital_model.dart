@@ -23,6 +23,7 @@ class Hospital {
     required this.operadorasPlanoSaude,
   });
 
+  // Método para converter de JSON para Hospital
   factory Hospital.fromJson(Map<String, dynamic> json) {
     return Hospital(
       id: json['id'],
@@ -30,12 +31,24 @@ class Hospital {
       cnpj: json['cnpj'],
       endereco: json['endereco'],
       statusOperacao: json['statusOperacao'],
-      tiposAtendimento:
-          List<String>.from(json['tiposAtendimento'] ?? []),
+      tiposAtendimento: List<String>.from(json['tiposAtendimento'] ?? []),
       operadorasPlanoSaude: List<Map<String, String>>.from(
         json['operadorasPlanoSaude']?.map((e) => Map<String, String>.from(e)) ??
             [],
       ),
     );
+  }
+
+  // Método para converter Hospital para JSON
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'nome': nome,
+      'cnpj': cnpj,
+      'endereco': endereco,
+      'statusOperacao': statusOperacao,
+      'tiposAtendimento': tiposAtendimento,
+      'operadorasPlanoSaude': operadorasPlanoSaude,
+    };
   }
 }

@@ -43,13 +43,13 @@ class AtendimentoRepository {
 
 
 
-Future<bool> solicitarGuiaAtendimento({
+Future<RetornoGuiaModel> solicitarGuiaAtendimento({
   required int especialidadeId,
   required int hospitalId,
 }) async {
   try {
     // Obtendo o usuário do armazenamento
-    Usuario? usuario = await storage.getUser();
+    final usuario = await storage.getUser();
     
     // Verificando se o usuário foi encontrado
     if (usuario == null) {
@@ -71,16 +71,19 @@ Future<bool> solicitarGuiaAtendimento({
       }),
     );
 
-    // Verificando o status da resposta
     if (res.statusCode != 200) {
       throw Exception('Erro na requisição: ${res.body}');
     }
 
-    return true;
+    final decodedBody = jsonDecode(utf8.decode(res.bodyBytes)) as Map<String, dynamic>;
+
+    final retorno = RetornoGuiaModel.fromJson(decodedBody);
+
+    return retorno;
   } catch (e, stacktrace) {
-    // Exibindo erro no console
     print('Error: $e\nstack: $stacktrace');
-    return false;
+    rethrow;
+  
   }
 }
 
@@ -196,6 +199,26 @@ Future<List<Especialidade>> getEspecialidades() async {
 
       if (res.statusCode != 200) {
         throw Exception('Erro ao realizar autorização: ${res.statusCode}');
+      }
+
+      return true;
+    } catch (e, stackTrace) {
+      print('Erro em realizarAutorizacaoGuia: $e');
+      print(stackTrace);
+      throw Exception('Erro ao realizar autorização de guia');
+    }
+  }
+
+
+    Future<bool> enviaGuiaAssinada(int idGuia, String image) async {
+    try {
+      final url = Uri.https('fila.wiremockapi.cloud', '/guia/$idGuia');
+      final res = await client.post(url, body: jsonEncode({'documentoAssinadoBase64': image}));
+
+      if (res.statusCode != 200) {
+        return false;
+        throw Exception('Erro ao realizar autorização: ${res.statusCode}');
+
       }
 
       return true;

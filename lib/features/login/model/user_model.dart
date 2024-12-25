@@ -197,3 +197,52 @@ class PlanoSaude {
     };
   }
 }
+
+
+
+
+class RetornoGuiaModel {
+  final int? idGuia;
+  final int? numeroGuia;
+  final int? codigoGuiaANS;
+  final DateTime? dataAutorizacao;
+  final DateTime? dataValidade;
+  final String? status;
+
+  RetornoGuiaModel({
+    this.idGuia,
+    this.numeroGuia,
+    this.codigoGuiaANS,
+    this.dataAutorizacao,
+    this.dataValidade,
+    this.status,
+  });
+
+  // Construtor para criar uma instância a partir de um Map (JSON)
+  factory RetornoGuiaModel.fromJson(Map<String, dynamic> json) {
+    return RetornoGuiaModel(
+      idGuia: json['idGuia'] as int?,
+      numeroGuia: json['numeroGuia'] as int?,
+      codigoGuiaANS: json['codigoGuiaANS'] as int?,
+      dataAutorizacao: json['dataAutorizacao'] != null
+          ? DateTime.parse(json['dataAutorizacao'])
+          : null,
+      dataValidade: json['dataValidade'] != null
+          ? DateTime.parse(json['dataValidade'])
+          : null,
+      status: json['status'] as String?,
+    );
+  }
+
+  // Método para converter a instância em Map (JSON)
+  Map<String, dynamic> toJson() {
+    return {
+      'idGuia': idGuia,
+      'numeroGuia': numeroGuia,
+      'codigoGuiaANS': codigoGuiaANS,
+      'dataAutorizacao': dataAutorizacao?.toIso8601String(),
+      'dataValidade': dataValidade?.toIso8601String(),
+      'status': status,
+    };
+  }
+}

@@ -6,7 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 class GerarGuiaPage extends StatefulWidget {
-  const GerarGuiaPage({super.key});
+  AtendimentoController controller;
+  GerarGuiaPage(this.controller, {super.key});
 
   @override
   State<GerarGuiaPage> createState() => _GerarGuiaPageState();
@@ -15,15 +16,15 @@ class GerarGuiaPage extends StatefulWidget {
 class _GerarGuiaPageState extends State<GerarGuiaPage> {
   String? selectedHospital;
   String? selectedSpecialty;
-    int? selectedHospitalId;
+  int? selectedHospitalId;
   int? selectedSpecialtyId;
   String searchQuery = '';
 
-  final controller = Modular.get<AtendimentoController>();
+
   @override
   void initState() {
-    controller.getHospitais();
-    controller.getEspecialidades();
+    widget.controller.getHospitais();
+     widget.controller.getEspecialidades();
     super.initState();
   }
 
@@ -40,16 +41,17 @@ class _GerarGuiaPageState extends State<GerarGuiaPage> {
                 showDialog(
                   context: context,
                   builder: (context) => HospitalSearchDialog(
-                    hospitals: controller.hospitais,
+                    hospitals:  widget.controller.hospitais,
                     onSelected: (hospital) {
                       setState(() {
                         selectedHospital = hospital;
 
-                         var hospselect = controller.hospitais.firstWhere(
-  (hosp) => hosp.nome == selectedHospital,
-  orElse: () => controller.hospitais.first, // Se não encontrar, retorna null
-);
-                        selectedHospitalId =  int.parse( hospselect.id);
+                        var hospselect =  widget.controller.hospitais.firstWhere(
+                          (hosp) => hosp.nome == selectedHospital,
+                          orElse: () =>  widget.controller.hospitais
+                              .first, // Se não encontrar, retorna null
+                        );
+                        selectedHospitalId = int.parse(hospselect.id);
                       });
                       Navigator.of(context).pop(); // Fecha o diálogo
                     },
@@ -72,7 +74,6 @@ class _GerarGuiaPageState extends State<GerarGuiaPage> {
             ),
           ),
           SizedBox(height: 40),
-          // Dropdown para escolher uma especialidade
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: GestureDetector(
@@ -80,15 +81,19 @@ class _GerarGuiaPageState extends State<GerarGuiaPage> {
                 showDialog(
                   context: context,
                   builder: (context) => SpecialtySearchDialog(
-                    specialties: controller.especialidades,
+                    specialties:  widget.controller.especialidades,
                     onSelected: (specialty) {
                       setState(() {
                         selectedSpecialty = specialty;
-                        var especialidadeSelecionada = controller.especialidades.firstWhere(
-  (especialidade) => especialidade.descricao == selectedSpecialty,
-  orElse: () => controller.especialidades.first, // Se não encontrar, retorna null
-);
-                        selectedSpecialtyId =  int.parse( especialidadeSelecionada.id);
+                        var especialidadeSelecionada =
+                             widget.controller.especialidades.firstWhere(
+                          (especialidade) =>
+                              especialidade.descricao == selectedSpecialty,
+                          orElse: () =>  widget.controller.especialidades
+                              .first, // Se não encontrar, retorna null
+                        );
+                        selectedSpecialtyId =
+                            int.parse(especialidadeSelecionada.id);
                       });
                       Navigator.of(context).pop(); // Fecha o diálogo
                     },
@@ -124,22 +129,41 @@ class _GerarGuiaPageState extends State<GerarGuiaPage> {
                   ),
                   // Padding
                 ),
-                onPressed: () {
+                onPressed: () async {
                   if (selectedHospital != null && selectedSpecialty != null) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Text(
                             'Você selecionou: $selectedHospital e $selectedSpecialty'),
                       ),
-
-                   
                     );
-                  controller.solicitarGuiaAtendimento( selectedHospitalId!, selectedSpecialtyId!);
+
+
+                    widget.controller.qrcode.hospital =  widget.controller.hospitais.firstWhere(
+                          (hosp) => hosp.nome == selectedHospital,
+                          orElse: () =>  widget.controller.hospitais
+                              .first, 
+                        );
+                          widget.controller.qrcode!.especialidade =  widget.controller.especialidades.firstWhere(
+                          (hosp) => hosp.descricao == selectedSpecialty,
+                          orElse: () =>  widget.controller.especialidades
+                              .first, 
+                        );
+
+                    await  widget.controller.solicitarGuiaAtendimento(
+                      selectedHospitalId!,
+                      selectedSpecialtyId!,
+                    );
+
+                    if ( widget.controller.guia.status == "Pendente Assinatura") {
+                      widget.controller.tabController!.animateTo(1);
+                    }
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Text(
-                            'Por favor, selecione um hospital e uma especialidade.'),
+                          'Por favor, selecione um hospital e uma especialidade.',
+                        ),
                       ),
                     );
                   }

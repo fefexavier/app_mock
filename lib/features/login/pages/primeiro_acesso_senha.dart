@@ -25,12 +25,12 @@ class _PrimeiroAcessoSenhaPageState extends State<PrimeiroAcessoSenhaPage>
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController repeatPasswordController =
       TextEditingController();
-        final controller = Modular.get<LoginController>();
+  final controller = Modular.get<LoginController>();
 
   // FocusNodes para navegação entre os campos
   final FocusNode passwordNode = FocusNode();
   final FocusNode repeatPasswordNode = FocusNode();
-       final ILocalStorage storage = Modular.get();
+  final ILocalStorage storage = Modular.get();
 
   @override
   void dispose() {
@@ -70,17 +70,14 @@ class _PrimeiroAcessoSenhaPageState extends State<PrimeiroAcessoSenhaPage>
     return null;
   }
 
-
   void salvarUsuarioComImagens(Usuario usuarioAtual) {
-
-  final usuarioAtualizado = usuarioAtual.copyWith(
-    senha: passwordController.value.text,
-  
-  );
-  controller.setUser(usuarioAtualizado);
-  // Exemplo: Enviar o usuário atualizado para o controller ou backend
-  print(usuarioAtualizado.toJson());
-}
+    final usuarioAtualizado = usuarioAtual.copyWith(
+      senha: passwordController.value.text,
+    );
+    controller.setUser(usuarioAtualizado);
+    // Exemplo: Enviar o usuário atualizado para o controller ou backend
+    print(usuarioAtualizado.toJson());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -187,7 +184,7 @@ class _PrimeiroAcessoSenhaPageState extends State<PrimeiroAcessoSenhaPage>
                   SizedBox(
                     width: double.maxFinite,
                     child: MyOutlinedButton(
-                      onPressed: () async{
+                      onPressed: () async {
                         // Remove o foco dos campos ao clicar no botão
                         FocusManager.instance.primaryFocus?.unfocus();
 
@@ -195,10 +192,10 @@ class _PrimeiroAcessoSenhaPageState extends State<PrimeiroAcessoSenhaPage>
                         if (_formKeyacesso.currentState?.validate() ?? false) {
                           print("Formulário validado com sucesso!");
 
-                       Usuario?  usuario =  await storage.getUser();
-            salvarUsuarioComImagens(usuario!);
-                          controller.saveUser();
-                         // Modular.to.pushNamed('base');
+                          Usuario? usuario = await storage.getUser();
+                          salvarUsuarioComImagens(usuario!);
+                          controller.saveUser(context);
+                  
                         } else {
                           print("Erro na validação do formulário");
                         }
