@@ -329,9 +329,7 @@ final ILocalStorage storage = Modular.get();
                               /// Valida se o PDF foi baixado (se for obrigatório)
 
                               /// Valida se o usuário fez a selfie
-                              if (
-                                  // _selfie == null ||
-                                  _assinaturaFile == null) {
+                              if ( _assinaturaFile == null || _selfie == null) {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(
                                     content: Text(
@@ -340,20 +338,15 @@ final ILocalStorage storage = Modular.get();
                                 );
                                 return;
                               } else {
-                                widget.controller.qrcode.assinaturaGuia =
-                                    await fileToBase64(_assinaturaFile!);
-                                // widget.controller.qrcode.selfieGuia = await fileToBase64(_selfie!);
-                                widget.controller.qrcode.idGuia =
-                                    widget.controller.guia.idGuia!;
+                                widget.controller.qrcode.assinaturaGuia =  await fileToBase64(_assinaturaFile!);
+                                widget.controller.qrcode.selfieGuia = await fileToBase64(_selfie!);
+                                widget.controller.qrcode.idGuia = widget.controller.guia.idGuia!;
 
-
-       final usuario = await storage.getUser();
-         widget.controller.qrcode.idUsuario =
-                              usuario!.cpf!;
-                                String file =
-                                    await fileToBase64(_assinaturaFile!);
-                                widget.controller.enviaGuiaAssinada(
-                                    widget.controller.guia.idGuia!, file);
+                                final usuario = await storage.getUser();
+                                widget.controller.qrcode.idUsuario = usuario!.cpf!;
+                                String file = await fileToBase64(_assinaturaFile!);
+                                String selfie = await fileToBase64(_selfie!);
+                                widget.controller.enviaGuiaAssinada( widget.controller.guia.idGuia!, file, selfie);
                                 widget.controller.tabController!.animateTo(2);
                               }
 

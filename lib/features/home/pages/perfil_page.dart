@@ -100,7 +100,7 @@ class _PerfilPageState extends State<PerfilPage> {
                       onPressed: () {
                         // Logica para logout
                         Navigator.pop(context);
-                        Modular.to.pushNamedAndRemoveUntil('/login', (route) => false);
+                        Modular.to.pushNamedAndRemoveUntil('/', (route) => false);
                       },
                       child: Text("Sair"),
                     ),

@@ -51,6 +51,7 @@ dependencies:
   firebase_core: ^2.17.1 
   firebase_auth: ^4.5.2 
   asuka: ^2.2.1
+  http: ^1.2.2
   qr_flutter:
     git:
       url: https://github.com/theyakka/qr.flutter.git

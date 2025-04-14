@@ -1,5 +1,5 @@
 class Especialidade {
-  final String id;
+  final int id;
   final String nomeEspecialidade;
   final String descricao;
   final bool necessitaEncaminhamento;
@@ -14,7 +14,7 @@ class Especialidade {
   factory Especialidade.fromJson(Map<String, dynamic> json) {
     return Especialidade(
       id: json['id'],
-      nomeEspecialidade: json['nomeEspecialidade'],
+      nomeEspecialidade: json['nome'],
       descricao: json['descricao'],
       necessitaEncaminhamento: json['necessitaEncaminhamento'],
     );

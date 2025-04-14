@@ -80,9 +80,17 @@ class LoginController {
   //   }
   // }
 
-  Future<void> login(String login, String pass, BuildContext context) async {
-    // isLoading.value = true;
-    // final result = await cognito.signInUser(login, pass);
+  Future<void> login(String cpf, String pass, BuildContext context) async {
+     isLoading.value = true;
+
+     try{
+       await repository.logarUsuario(context, cpf,pass);
+     }
+     catch(e){
+       log('ErroLogin: $e');
+     }
+
+     isLoading.value = false;
 
     // if (result.error == null) {
     //   await saveUser();

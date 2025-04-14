@@ -222,12 +222,12 @@ void dispose() {
                                   return;
                                 }
 
-                                // controller.login(
-                                //   emailLoginTextEditingController.text,
-                                //   passwordController.text,
-                                //   context,
-                                // );
-                                    Modular.to.pushNamed('base');
+                                controller.login(
+                                   emailLoginTextEditingController.text,
+                                   passwordController.text,
+                                   context,
+                                 );
+                                //Modular.to.pushNamed('base');
                               },
                               gradient: const LinearGradient(colors: [
                                 Color.fromRGBO(0, 109, 119, 1),

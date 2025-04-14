@@ -10,7 +10,7 @@ class Usuario {
   final String? complementoEndereco;
   final String? telefone;
   final String? email;
-  final String? planoSaude;
+  final String? operadoraId;
   final String? numeroCarteira;
   final String? imagemPerfil; 
   final String? documentoAssinado; 
@@ -29,7 +29,7 @@ class Usuario {
      this.complementoEndereco,
      this.telefone,
      this.email,
-     this.planoSaude,
+     this.operadoraId,
      this.numeroCarteira,
     this.imagemPerfil,
     this.documentoAssinado,
@@ -50,7 +50,7 @@ class Usuario {
       'complementoEndereco': complementoEndereco,
       'telefone': telefone,
       'email': email,
-      'planoSaude': planoSaude,
+      'operadoraId': operadoraId,
       'numeroCarteira': numeroCarteira,
       'imagemPerfil': imagemPerfil,
       'documentoAssinado': documentoAssinado,
@@ -71,12 +71,12 @@ class Usuario {
       complementoEndereco: json['complementoEndereco'] as String,
       telefone: json['telefone'] as String,
       email: json['email'] as String,
-      planoSaude: json['planoSaude'] as String,
+      operadoraId: json['operadoraId'] as String,
       numeroCarteira: json['numeroCarteira'] as String,
       imagemPerfil: json['imagemPerfil'] as String?,
       documentoAssinado: json['documentoAssinado'] as String?,
       comprovanteResidencia: json['comprovanteResidencia'] as String?,
-            senha: json['senha'] as String?,
+      senha: json['senha'] as String?,
     );
   }
 
@@ -91,7 +91,7 @@ class Usuario {
     String? complementoEndereco,
     String? telefone,
     String? email,
-    String? planoSaude,
+    String? operadoraId,
     String? numeroCarteira,
     String? imagemPerfil,
     String? documentoAssinado,
@@ -108,7 +108,7 @@ class Usuario {
       complementoEndereco: complementoEndereco ?? this.complementoEndereco,
       telefone: telefone ?? this.telefone,
       email: email ?? this.email,
-      planoSaude: planoSaude ?? this.planoSaude,
+      operadoraId: operadoraId ?? this.operadoraId,
       numeroCarteira: numeroCarteira ?? this.numeroCarteira,
       imagemPerfil: imagemPerfil ?? this.imagemPerfil,
       documentoAssinado: documentoAssinado ?? this.documentoAssinado,
@@ -120,18 +120,18 @@ class Usuario {
 
 
 class OperadoraPlanoSaude {
-  final String id;
+  final int id;
   final String nomeSocial;
   final String cnpj;
   final String registroANS;
-  final ParametrosAutorizacao parametrosAutorizacao;
+  final bool ativado;
 
   OperadoraPlanoSaude({
     required this.id,
     required this.nomeSocial,
     required this.cnpj,
     required this.registroANS,
-    required this.parametrosAutorizacao,
+    required this.ativado,
   });
 
   factory OperadoraPlanoSaude.fromJson(Map<String, dynamic> json) {
@@ -140,7 +140,7 @@ class OperadoraPlanoSaude {
       nomeSocial: json['nomeSocial'],
       cnpj: json['cnpj'],
       registroANS: json['registroANS'],
-      parametrosAutorizacao: ParametrosAutorizacao.fromJson(json['parametrosAutorizacao']),
+      ativado: json['ativado'],
     );
   }
 
@@ -150,7 +150,7 @@ class OperadoraPlanoSaude {
       'nomeSocial': nomeSocial,
       'cnpj': cnpj,
       'registroANS': registroANS,
-      'parametrosAutorizacao': parametrosAutorizacao.toJson(),
+      'ativado': ativado,
     };
   }
 }
@@ -221,16 +221,16 @@ class RetornoGuiaModel {
   // Construtor para criar uma instância a partir de um Map (JSON)
   factory RetornoGuiaModel.fromJson(Map<String, dynamic> json) {
     return RetornoGuiaModel(
-      idGuia: json['idGuia'] as int?,
-      numeroGuia: json['numeroGuia'] as int?,
+      idGuia: json['id'] as int?,
+      numeroGuia: json['autorizacaoId'] as int?,
       codigoGuiaANS: json['codigoGuiaANS'] as int?,
-      dataAutorizacao: json['dataAutorizacao'] != null
-          ? DateTime.parse(json['dataAutorizacao'])
+      dataAutorizacao: json['dataEmissao'] != null
+          ? DateTime.parse(json['dataEmissao'])
           : null,
       dataValidade: json['dataValidade'] != null
           ? DateTime.parse(json['dataValidade'])
           : null,
-      status: json['status'] as String?,
+      status: json['statusGuia'] as String?,
     );
   }
 
@@ -245,4 +245,76 @@ class RetornoGuiaModel {
       'status': status,
     };
   }
+}
+
+class JwtPayload {
+  final int usuarioId;
+  final String cpf;
+  final int operadoraId;
+  final int iat;
+  final int exp;
+
+  JwtPayload({
+    required this.usuarioId,
+    required this.cpf,
+    required this.operadoraId,
+    required this.iat,
+    required this.exp,
+  });
+
+  factory JwtPayload.fromJson(Map<String, dynamic> json) {
+    return JwtPayload(
+      usuarioId: json['usuarioId'],
+      cpf: json['cpf'],
+      operadoraId: json['operadoraId'],
+      iat: json['iat'],
+      exp: json['exp'],
+    );
+  }
+}
+
+class Guia {
+  final int id;
+  final String statusGuia;
+  final String dataEmissao;
+  final String especialidade;
+  final String hospital;
+  final String nome;
+  final String numeroCartaoOperadora;
+  final String operadora;
+
+  Guia({
+    required this.id,
+    required this.statusGuia,
+    required this.dataEmissao,
+    required this.especialidade,
+    required this.hospital,
+    required this.nome,
+    required this.numeroCartaoOperadora,
+    required this.operadora,
+  });
+
+  factory Guia.fromJson(Map<String, dynamic> json) {
+    return Guia(
+      id: json['id'],
+      statusGuia: json['statusGuia'],
+      dataEmissao: json['dataEmissao'],
+      especialidade: json['especialidade'],
+      hospital: json['hospital'],
+      nome: json['nome'],
+      numeroCartaoOperadora: json['numeroCartaoOperadora'],
+      operadora: json['operadora'],
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
+    'id': id,
+    'statusGuia': statusGuia,
+    'dataEmissao': dataEmissao,
+    'especialidade': especialidade,
+    'hospital': hospital,
+    'nome': nome,
+    'numeroCartaoOperadora': numeroCartaoOperadora,
+    'operadora': operadora,
+  };
 }

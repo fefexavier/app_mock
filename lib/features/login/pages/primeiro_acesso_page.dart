@@ -111,8 +111,10 @@ class _PrimeiroAcessoPageState extends State<PrimeiroAcessoPage>
 
   void salvarUsuario() {
     if (_formKeyacesso.currentState!.validate()) {
+      var operadoraSel = controller.operadoras.firstWhere((operadora) => operadora.nomeSocial == plano.text);
+
       final usuario = Usuario(
-        cpf: cpf.text,
+        cpf: cpf.text.replaceAll(RegExp(r'[^0-9]'), ''),
         nome: nome.text,
         dataNascimento: data.text,
         cep: cep.text,
@@ -121,7 +123,7 @@ class _PrimeiroAcessoPageState extends State<PrimeiroAcessoPage>
         complementoEndereco: complementoEnd.text,
         telefone: telefone.text,
         email: email.text,
-        planoSaude: plano.text,
+        operadoraId: operadoraSel.id.toString(),
         numeroCarteira: ncarteira.text,
       );
 

@@ -3,10 +3,30 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:app_mock/features/login/model/user_model.dart';
 
+extension JwtDecoder on String {
+  JwtPayload decodeJwt() {
+    final parts = split('.');
+    if (parts.length != 3) {
+      throw const FormatException('Invalid JWT token');
+    }
+
+    final payload = parts[1];
+    final normalizedPayload = base64.normalize(payload);
+    final decodedPayload = utf8.decode(base64.decode(normalizedPayload));
+    final payloadMap = json.decode(decodedPayload) as Map<String, dynamic>;
+
+    return JwtPayload.fromJson(payloadMap);
+  }
+}
+
 abstract class ILocalStorage {
   Future<Usuario?> getUser();
   Future<void> setUser(Usuario user);
   Future<void> clearUser();
+  Future<String?> getToken();
+  Future<void> setToken(String token);
+  Future<void> clearToken();
+  Future<JwtPayload?> getDecodedToken();
 }
 
 class LocalStorage implements ILocalStorage {
@@ -14,6 +34,7 @@ class LocalStorage implements ILocalStorage {
 
   @override
   Usuario user = Usuario();
+  String token = ""; // TODO: verificar se precisa ficar instaciado na classe
 
   LocalStorage() {
     _init();
@@ -48,5 +69,41 @@ class LocalStorage implements ILocalStorage {
     final shared = await _instance.future;
     await shared.remove('user');
     user = Usuario();
+  }
+
+  @override
+  Future<String?> getToken() async {
+    final shared = await _instance.future;
+    final String token = shared.getString('token') ?? '';
+    if (token.isNotEmpty) {
+      return token;
+    }
+    return null;
+  }
+
+  @override
+  Future<void> setToken(String token) async {
+    final shared = await _instance.future;
+    await shared.setString('token', token);
+    this.token = token;
+  }
+
+  @override
+  Future<void> clearToken() async {
+    final shared = await _instance.future;
+    await shared.remove('token');
+    this.token = "";
+  }
+
+  @override
+  Future<JwtPayload?> getDecodedToken() async {
+    try {
+      final token = await getToken();
+      if (token == null) return null;
+      return token.decodeJwt();
+    } catch (e) {
+      print('Error decoding JWT: $e');
+      return null;
+    }
   }
 }

@@ -105,37 +105,38 @@ void initTabController(TickerProvider tickerProvider) {
   }
 
   // Cadastrar Usuário
-  Future<bool> cadastrarUsuario(Map<String, dynamic> usuarioData) async {
-    try {
-      final sucesso = await repository.cadastrarUsuario(usuarioData);
-      if (sucesso) {
-        log('Usuário cadastrado com sucesso');
-      } else {
-        log('Falha ao cadastrar usuário');
-      }
-      return sucesso;
-    } catch (e) {
-      log('Erro ao cadastrar usuário: $e');
-      return false;
-    }
-  }
+  // Future<bool> cadastrarUsuario(Map<String, dynamic> usuarioData) async {
+    // try {
+      // final sucesso = await repository.cadastrarUsuario(usuarioData);
+    //}
+    //  if (sucesso) {
+    //    log('Usuário cadastrado com sucesso');
+    //  } else {
+    //    log('Falha ao cadastrar usuário');
+    //  }
+    //  return sucesso;
+    //} catch (e) {
+    //  log('Erro ao cadastrar usuário: $e');
+    //  return false;
+      // }
+  //}
 
 
-    Future<bool> enviaGuiaAssinada(int idGuia, String image) async {
+    Future<bool> enviaGuiaAssinada(int idGuia, String image, String selfie) async {
         stateEnvioassinatura.value = PaginateState.loading;
     try {
-      final sucesso = await repository.enviaGuiaAssinada(idGuia, image);
+      final sucesso = await repository.enviaGuiaAssinada(idGuia, image, selfie);
       if (sucesso) {
                stateEnvioassinatura.value = PaginateState.loading;
         log('guia enviada com sucesso');
           stateEnvioassinatura.value = PaginateState.sucess;
       } else {
            stateEnvioassinatura.value = PaginateState.error;
-        log('Falha aoenviar guia');
+        log('Falha ao enviar guia');
       }
       return sucesso;
     } catch (e) {
-      log('Erro aoenviar guia: $e');
+      log('Erro ao enviar guia: $e');
       return false;
     }
   }

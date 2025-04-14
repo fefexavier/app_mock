@@ -51,7 +51,7 @@ class _GerarGuiaPageState extends State<GerarGuiaPage> {
                           orElse: () =>  widget.controller.hospitais
                               .first, // Se não encontrar, retorna null
                         );
-                        selectedHospitalId = int.parse(hospselect.id);
+                        selectedHospitalId = hospselect.id;
                       });
                       Navigator.of(context).pop(); // Fecha o diálogo
                     },
@@ -93,7 +93,7 @@ class _GerarGuiaPageState extends State<GerarGuiaPage> {
                               .first, // Se não encontrar, retorna null
                         );
                         selectedSpecialtyId =
-                            int.parse(especialidadeSelecionada.id);
+                            especialidadeSelecionada.id;
                       });
                       Navigator.of(context).pop(); // Fecha o diálogo
                     },

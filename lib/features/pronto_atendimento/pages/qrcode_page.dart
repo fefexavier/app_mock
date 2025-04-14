@@ -32,9 +32,6 @@ class _QrcodePageState extends State<QrcodePage> {
       "idHospital": widget.controller.qrcode.hospital!.id,
       "idespecialidade":  widget.controller.qrcode.especialidade!.id, // Caso não haja um valor específico
       "idGuia":  widget.controller.qrcode.idGuia,
-      "guia":  widget.controller.qrcode.imageGuia,
-      "assinatura": widget.controller.qrcode.assinaturaGuia,
-      "selfie_assinatur": widget.controller.qrcode.selfieGuia,
     } : null;
     jsonData = jsonEncode(jsonMap);
   }
