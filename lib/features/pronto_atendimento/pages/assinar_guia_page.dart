@@ -270,54 +270,68 @@ final ILocalStorage storage = Modular.get();
                         ),
                         SizedBox(height: 20),
                         // Campo de selfie
-                        Container(
-                          width: double.infinity,
-                          padding: const EdgeInsets.all(16.0),
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                                color: lightColor.brandPrimary, width: 2.0),
-                            borderRadius: BorderRadius.circular(12.0),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Selfie',
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                  color: lightColor.brandPrimary,
-                                ),
-                              ),
-                              SizedBox(height: 16),
-                              _selfie != null
-                                  ? Image.file(
-                                      _selfie!,
-                                      height: 200,
-                                      width: double.infinity,
-                                      fit: BoxFit.cover,
-                                    )
-                                  : Container(
-                                      height: 200,
-                                      width: double.infinity,
-                                      color: Colors.grey[200],
-                                      child: Icon(
-                                        Icons.camera_alt,
-                                        size: 100,
-                                        color: Colors.grey,
-                                      ),
-                                    ),
-                              SizedBox(height: 16),
-                              ElevatedButton.icon(
-                                onPressed: () => _setSelfie(ImageSource.camera),
-                                icon: Icon(Icons.camera),
-                                label: Text('Tirar Selfie'),
-                                style: ElevatedButton.styleFrom(
-                                    shadowColor: lightColor.brandTertiary),
-                              ),
-                            ],
-                          ),
-                        ),
+                      Container(
+  width: double.infinity,
+  padding: const EdgeInsets.all(16.0),
+  decoration: BoxDecoration(
+    border: Border.all(color: lightColor.brandPrimary, width: 2.0),
+    borderRadius: BorderRadius.circular(12.0),
+  ),
+  child: Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Text(
+        'Selfie',
+        style: TextStyle(
+          fontSize: 18,
+          fontWeight: FontWeight.bold,
+          color: lightColor.brandPrimary,
+        ),
+      ),
+      SizedBox(height: 16),
+      _selfie != null
+          ? Image.file(
+              _selfie!,
+              height: 200,
+              width: double.infinity,
+              fit: BoxFit.cover,
+            )
+          : Container(
+              height: 200,
+              width: double.infinity,
+              color: Colors.grey[200],
+              child: Icon(
+                Icons.camera_alt,
+                size: 100,
+                color: Colors.grey,
+              ),
+            ),
+      SizedBox(height: 16),
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          ElevatedButton.icon(
+            onPressed: () => _setSelfie(ImageSource.camera),
+            icon: Icon(Icons.camera_alt),
+            label: Text('Tirar Selfie'),
+            style: ElevatedButton.styleFrom(
+              shadowColor: lightColor.brandTertiary,
+            ),
+          ),
+          ElevatedButton.icon(
+            onPressed: () => _setSelfie(ImageSource.gallery),
+            icon: Icon(Icons.photo_library),
+            label: Text('Galeria'),
+            style: ElevatedButton.styleFrom(
+              shadowColor: lightColor.brandTertiary,
+            ),
+          ),
+        ],
+      ),
+    ],
+  ),
+),
+
                         SizedBox(height: 20),
                         // Botão de prosseguir
                         SizedBox(

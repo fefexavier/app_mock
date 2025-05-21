@@ -1,0 +1,13 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "C/C++ Runner: Debug Session",
+      "type": "lldb",
+      "request": "launch",
+      "args": [],
+      "cwd": "/Users/fernandaxavier/Documents/TCC/app-mock/app_mock/windows/flutter",
+      "program": "/Users/fernandaxavier/Documents/TCC/app-mock/app_mock/windows/flutter/build/Debug/outDebug"
+    }
+  ]
+}

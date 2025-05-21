@@ -158,6 +158,7 @@ class LoginService {
           backgroundColor: lightColor.brandPrimary,
         ),
       );
+      
       Modular.to.pushNamed('base');
     } catch (e, stacktrace) {
       print('Error: $e\nStack: $stacktrace');
