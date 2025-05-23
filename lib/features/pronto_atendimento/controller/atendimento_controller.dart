@@ -164,4 +164,18 @@ void initTabController(TickerProvider tickerProvider) {
       log('Erro ao realizar autorização: $e');
     }
   }
+
+   Future<void> baixarGuiaPdf() async {
+  
+
+    try {
+      await repository.downloadPdf(guia.idGuia!, "");
+    } catch (e) {
+  
+      debugPrint('Erro no controller: $e');
+    } finally {
+
+    }
+  }
 }
+

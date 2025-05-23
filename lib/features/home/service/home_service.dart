@@ -172,9 +172,9 @@ Future<List<Especialidade>> getEspecialidades() async {
 
 
   // Obter Informações do Usuário
-  Future<Map<String, dynamic>> getUsuario() async {
+  Future<Usuario> getUsuario(int id) async {
     try {
-      final url = Uri.https('fila-app-two.vercel.app', '/usuario');
+      final url = Uri.https('fila-app-two.vercel.app', '/usuario/$id');
       final res = await client.get(url,
         headers: {
           'Authorization': 'Bearer ${await storage.getToken()}',
@@ -196,7 +196,7 @@ Future<List<Especialidade>> getEspecialidades() async {
         throw Exception('Resposta vazia');
       }
 
-      return decodedBody;
+       return Usuario.fromJson(decodedBody);
     } catch (e, stackTrace) {
       print('Erro em getUsuario: $e');
       print(stackTrace);

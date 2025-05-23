@@ -2,6 +2,7 @@ import 'package:app_mock/core/colors';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:heroicons/heroicons.dart';
+import '../../../core/repositories/local_storage.dart';
 
 class PerfilPage extends StatefulWidget {
   const PerfilPage({super.key});
@@ -11,6 +12,23 @@ class PerfilPage extends StatefulWidget {
 }
 
 class _PerfilPageState extends State<PerfilPage> {
+  final ILocalStorage storage = Modular.get();
+String? userName;
+
+
+  @override
+  void initState() {
+_loadUserName();
+    super.initState();
+  }
+
+    Future<void> _loadUserName() async {
+    final user = await storage.getUser();
+    String? nome = user!.nome;
+    setState(() {
+      userName = nome ?? '';
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -47,7 +65,7 @@ class _PerfilPageState extends State<PerfilPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "FERNANDA AZEVEDO XAVIER ".toUpperCase(),
+                    userName?? "".toUpperCase(),
                     style:
                         TextStyle(color: lightColor.brandPrimary, fontSize: 18),
                   ),

@@ -46,7 +46,8 @@ final ILocalStorage storage = Modular.get();
     }
   }
 
-  void _downloadPdf() {
+  void _downloadPdf()async  {
+    await widget.controller.baixarGuiaPdf( );
     setState(() {
       _downloadedPdf = true;
     });

@@ -59,6 +59,7 @@ class LoginController {
   }
 
   setUser(Usuario user) {
+  
     storage.setUser(user);
   }
   // Future<bool> _localAuth() async {

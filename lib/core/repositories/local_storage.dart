@@ -106,4 +106,8 @@ class LocalStorage implements ILocalStorage {
       return null;
     }
   }
+
+
+
+
 }

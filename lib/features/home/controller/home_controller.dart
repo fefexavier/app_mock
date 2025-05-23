@@ -10,7 +10,7 @@ import '../../../core/repositories/local_storage.dart';
 
 class HomeController {
   final repository = Modular.get<HomeRepository>();
-
+final ILocalStorage storage = Modular.get();
   // AutenticacaoServico _autenticacaoServico = AutenticacaoServico();
 
   Future<void> saveUser(BuildContext context) async {
@@ -22,9 +22,11 @@ class HomeController {
 
 
   setUser() async{
-   var usuario =  await repository.getUsuario();
+   var teste =  await storage.getDecodedToken();
+  int? id = teste!.usuarioId;
+   var usuario =  await repository.getUsuario(id);
 
-   // storage.setUser(user);
+    storage.setUser(usuario);
   }
 
 

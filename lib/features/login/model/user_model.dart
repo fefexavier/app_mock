@@ -61,24 +61,25 @@ class Usuario {
 
 
   factory Usuario.fromJson(Map<String, dynamic> json) {
-    return Usuario(
-      cpf: json['cpf'] as String,
-      nome: json['nome'] as String,
-      dataNascimento: json['dataNascimento'] as String,
-      cep: json['cep'] as String,
-      endereco: json['endereco'] as String,
-      numeroEndereco: json['numeroEndereco'] as String,
-      complementoEndereco: json['complementoEndereco'] as String,
-      telefone: json['telefone'] as String,
-      email: json['email'] as String,
-      operadoraId: json['operadoraId'] as String,
-      numeroCarteira: json['numeroCarteira'] as String,
-      imagemPerfil: json['imagemPerfil'] as String?,
-      documentoAssinado: json['documentoAssinado'] as String?,
-      comprovanteResidencia: json['comprovanteResidencia'] as String?,
-      senha: json['senha'] as String?,
-    );
-  }
+  return Usuario(
+    cpf: json['cpf'] as String?,
+    nome: json['nome'] as String?,
+    dataNascimento: json['dataNascimento'] as String?,
+    cep: json['cep'] as String?,
+    endereco: json['endereco'] as String?,
+    numeroEndereco: json['numeroEndereco'] as String?,
+    complementoEndereco: json['complementoEndereco'] as String?,
+    telefone: json['telefone'] as String?,
+    email: json['email'] as String?,
+    operadoraId: json['operadoraId']?.toString(),
+    numeroCarteira: json['numeroCarteira'] as String?,
+    imagemPerfil: json['imagemPerfil'] as String?,
+    documentoAssinado: json['documentoAssinado'] as String?,
+    comprovanteResidencia: json['comprovanteResidencia'] as String?,
+    senha: json['senha'] as String?,
+  );
+}
+
 
   
   Usuario copyWith({

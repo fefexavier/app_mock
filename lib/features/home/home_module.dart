@@ -3,6 +3,7 @@ import 'package:app_mock/features/home/controller/home_controller.dart';
 import 'package:app_mock/features/home/pages/alterar_senha.dart';
 import 'package:app_mock/features/home/pages/base_page.dart';
 import 'package:app_mock/features/home/pages/perguntas_frequentes.dart';
+import 'package:app_mock/features/home/pages/rede_credenciada_page.dart';
 import 'package:app_mock/features/home/pages/sobre.dart';
 import 'package:app_mock/features/home/service/home_service.dart';
 import 'package:app_mock/features/login/controller/login_controller.dart';
@@ -26,8 +27,10 @@ class HomeModule extends Module {
         child: (_) => BasePage(),
       )
       ..child('/sobre',child: (_) => SobrePage(),)
+      ..child('/rede-credenciada', child:(_) =>  RedeCredenciadaPage())
        ..child('/perguntas',child: (_) => PerguntasFrequentesPage(),)
               ..child('/alterar-senha',child: (_) => AlterarSEnhaPage(),)
       ..module('/pa', module: ProntoAtendimentoModule());
+      
   }
 }

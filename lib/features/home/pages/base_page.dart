@@ -24,6 +24,7 @@ final HomeController controller = Modular.get();
 
   @override
   void initState() {
+    
 controller.setUser();
     super.initState();
   }
